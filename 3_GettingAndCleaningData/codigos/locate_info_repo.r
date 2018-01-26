@@ -26,7 +26,7 @@ locate_info_repo <- function(url, search_field, search_data, return_info){
     if(dataJSON[repositories,search_field]==search_data)
       i <- repositories
   if(is.null(i))
-    stop("Deu ruim")
+    stop("Algo de errado não está certo... ")
       
    dataJSON[i,return_info]
 
