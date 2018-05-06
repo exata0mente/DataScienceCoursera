@@ -66,3 +66,68 @@ https://github.com/jtleek/datasharing#the-code-book
 ### Palavras-chave
 
 raw; tidy data
+
+## Como baixar um arquivo
+
+* Obter/Definir diretório
+    getwd()
+    setwd()
+* Checar e criar o diretório
+    file.exists("dirname") [retorna TRUE ou FALSE]
+    dir.create("dirname")
+* Obter arquivo da Web
+    download.file("url", destfile, method)
+        no linux, se o url for precedido por HTTPS, passe o parâmetro method="curl")
+
+## Lendo arquivos locais
+
+* read.table()
+    função flexivel e robusta, pode receber diversos parâmetros
+    pode ser lenta para grandes arquivos
+    lê os arquivos na memória RAM (o que pode ser ruim para arquivos muito grandes)
+    os parÂmetros mais importantes são file, header, sep, row.names, nrows
+
+## Lendo arquivos Excel
+
+Pacote xlsx 
+read.xlsx() - Lê o arquivo em excel
+    sheetIndex -> em qual "Planilha" ler
+    colIndex -> coluna(s) a ler
+    rowIndex -> linha(s) a ler
+write.xlsx() - Escreve o arquivo em excel, utiliza parametros similar
+read.xlsx2() - Parece ser melhor que o read.xlsx, mas apresenta instabilidade na leitura de subconjuntos
+Pacote  XLConnect é mais flexivel
+
+## Lendo arquivos XML
+
+Componentes de um XML:
+    Marcação: *Tag* de uma parte da estrutura
+    Conteúdo: Texto dentro da tag
+    
+abre tag: <exemplo>
+fecha tag: </exemplo>
+
+elementos: são tags específicas, por exemplo: <saudacoes> Bom dia, cara </saudacoes>
+atributos: são componentes da tag, exemplo: <img src="jeff.jpg" alt="instructor">
+
+pacote XML
+
+xmlTreeParse(file) - "converte" o conteúdo do XML para conteúdo analisável pelo R, ou seja, transforma o conteúdo do XML em um objeto que o R consiga interpretar.
+xmlRoot(obj) - retorna um objeto XML, estruturado em lista, a partir do nó principal, retirando por exemplo as tags de identificação de versão e etc. Além disso, estrutura o XML para que seja possível acessar cada elemento. É possível extrair subconjuntos do objeto.
+xmlName(obj) - retorna o nome do nó principal do objeto.
+xmlValue(obj) - retorna o conteúdo das tags do arquivo XML. O resultado é um único vetor, sem caractere de separção.
+xmlApply(obj, func) - Faz o mesmo papel do lapply e sapply. Acessa cada sub-nó do xml e aplica a função passada por parâmetro.
+xmlSApply(obj, func) - Faz o mesmo papel do lapply e sapply. Acessa cada sub-nó do xml e aplica a função passada por parâmetro.
+xpathSApply(obj, path, fun) - Utiliza a sintaxe XPath para localizar informações dentro de uma estrutura xml.
+
+XPath
+É uma linguagem de marcação que podemos utilizar para acessar nós do xml conforme sua estrutura. Para maiores informações, ler esta [publicação](https://www.stat.berkeley.edu/~statcur/Workshop2/Presentations/XML.pdf) recomendada.
+
+## Lendo arquivo JSON
+
+pacote jsonlite
+
+estrutura de dados, permite vários tipos de dados
+fromJSON(url) - retorna um objeto JSON a partir de uma url ou arquivo no formato json.
+toJSON(url) - converte um arquivo do tipo data.frame e um arquivo json.
+
