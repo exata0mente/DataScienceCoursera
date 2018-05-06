@@ -113,3 +113,140 @@ Funções básicas:
 * `toJSON(url)` - converte um arquivo do tipo data.frame e um arquivo json.
 
 ![mindmap3](recursos/lendo_arquivos.png)
+
+## Pacote `data.table`
+
+Próprio para data frames (funções que usam data.frame trabalham bem com data.table), mais eficiente comparado as funções read.* e rápido na extração de subconjuntos.
+
+`data.table()` possui os mesmos parâmetros da função `data.frame()`
+`tables()` traz informações sobre as tabelas (data.table) carregadas na memória.
+
+A estrutura de um data.table é basicamente DT[linha,coluna,*group by*]
+
+### Subconjuntos de linhas
+
+`DT[2,]` - traz só a segunda linha
+`DT[DT$y=="a"]`- traz apenas as **linhas** em que a coluna y tenha valores iguais a "a".
+Observação importante: Quando você está extraindo subconjuntos por índice, ou seja, `DT[y]`, o resultado é a **linha** correspondente a y. Ao contrário do data.frame em que o y corresponderia a coluna. Exemplo
+    
+    > DT[c(2,3)]
+            x y          z
+    1:  0.2717048 a -2.9952037
+    2: -0.1211096 a  0.2650059
+    > DF[c(2,3)]
+    y           z
+    1 a  0.12056471
+    2 a  0.67534778
+    3 a -0.79977420
+    4 b -0.56572865
+    5 b  2.23589244
+    6 b -0.93204517
+    7 c  0.76105567
+    8 c -0.74887635
+    9 c -0.05775674
+    
+### Subconjuntos de colunas
+
+Pode ser realizado normalmente com índices:
+`DT[,c(2,3)]` - traz todas as linhas das colunas 2 e 3
+Pode ser realizada com expressões em lista
+`DT[,list(mean(x),sum(z))]` traz as linhas (nesse caso uma) da média da coluna x e da soma da coluna z, cada variável em uma coluna.
+`DT[,c(2,3)] == DT[,list(y,z)]` Estas expressões são iguais.
+`DT[,c(mean(x),sum(z))] == DT[,list(mean(x),sum(z))]` Estas também.
+
+### Adicionando nova coluna
+
+Utilizar o operador `:=`
+
+`DT[,w:=z^2]` - Adiciona uma coluna z com o quadrado dos valores de z
+`DT[,k:={expressão}]` - adiciona uma coluna k com o resultado da expressão
+`DT[,a:=x>0]` - Adiciona uma coluna a com o resultado da relação lógica, ou seja, uma coluna de `TRUE` ou `FALSE`.
+
+
+Convém efetuar uma cópia do data frame antes de efetuar operações de inclusão de grandes conjuntos
+
+É possivel utilizar os conceitos de agrupamento, ou, *group by*
+
+utilizando a última expressão acima, podemos usar os resultados TRUE para adicionar determinado valor para cada registro. Exemplo:
+
+`DT[,b:=mean(x+w),by=a]` - Cria uma coluna b e se a for TRUE será inserido o valor da expressão `mean(x+w)` corresponde a sua linha, senão o resultado da expressão será o da coluna inteira, exemplo:
+
+    > DT[,b:=mean(x+w),by=a]
+    > DT
+                x y          z          w     a         b
+    1:  0.70869743 a  1.4576310 2.12468809  TRUE 3.3429836
+    2:  0.27170480 a -2.9952037 8.97124527  TRUE 3.3429836
+    3: -0.12110964 a  0.2650059 0.07022815 FALSE 0.7417882
+    4:  0.03489042 b -1.1522620 1.32770771  TRUE 3.3429836
+    5: -0.58378854 b -0.1124435 0.01264355 FALSE 0.7417882
+    6: -1.24286800 b -1.4060055 1.97685142 FALSE 0.7417882
+    7:  1.63823503 c -0.9293408 0.86367428  TRUE 3.3429836
+    8: -0.82632338 c -1.9187285 3.68151917 FALSE 0.7417882
+    9:  0.15564243 c -0.7864049 0.61843260  TRUE 3.3429836
+
+### Variáveis especiais
+
+**.N**, utilizado para contagens. Este é um um dos diferencias do pacote data.table.
+
+Exemplo
+
+    > DT <- data.table(x=sample(letters[1:3],1E5,TRUE))
+    > DT[,.N,by=x]
+    x     N
+    1: c 33028
+    2: b 33114
+    3: a 33858
+    
+Criamos um data frame com 100000 registros e rapidamente, utilizando o **.N** conseguimos a contagem de quantas vezes cada valor é encontrado no conjunto de dados. É basicamente um *count* de outras linguagens, porém muito eficiente em R.
+
+### Definição de chaves
+
+_Keys_ (chaves) são muito úteis para ordenação do data.table. 
+
+    > DT <- data.table(x = rep(c("a","b","c"),each=100), y=rnorm(300))
+    > setkey(DT, x)
+    > DT['a']
+        x           y
+    1: a  0.24976171
+    2: a -0.73185291
+    3: a  0.27755953
+    4: a  0.35010287
+    5: a  0.39267864
+    6: a -0.38501910
+
+Com a coluna x definida como chave, o DT automaticamente será ordenado conforme x, além de ser possível tirar subconjuntos indicando apenas o valor a ser procurado. Quando executamos `DT['a']`, o conteúdo "a" foi procurado diretamente na coluna x, algo parecido com `DT[x=="a"]` .
+
+### Mesclagem
+
+O pacote data.table tem uma função `merge()` para data frames criados pelo `data.table()`. Utilizando-a com o `setkey()` ganhamos mais velocidade no processamento das tabelas. Exemplo:
+
+    > DT1 <-data.table(x=c('a','a','b','dt1'),y=1:4)
+    > DT2 <- data.table(x=c('a','b','dt2'), z=5:7)
+    > setkey(DT1, x); setkey(DT2, x)
+    > merge(DT1,DT2)
+       x y z
+    1: a 1 5
+    2: a 2 5
+    3: b 3 6
+    
+## Leitura rápida
+
+A função `fread()` apresenta uma velocidade muito alta de leitura se comparada ao read.table, por exemplo. Segundo sua descrição no arquivo de ajuda, todos os controles como `sep`, `colClasses` e `nrows` são detectados automaticamente.
+
+Em um testes de "tempo" é possível verificar que realmente a leitura é rápida:
+
+    > bigdf <- data.frame(x=rnorm(1E6), y=rnorm(1E6))
+    > file <- tempfile() # cria localmente um arquivo temporário 
+    > write.table(bigdf,file = file, row.names = FALSE, col.names = TRUE, sep='\t', quote = FALSE)
+    > system.time(fread(file))
+    usuário   sistema decorrido 
+        0.252     0.000     0.069 
+    > system.time(read.table(file, header = TRUE, sep="\t"))
+    usuário   sistema decorrido 
+        5.755     0.000     5.790 
+        
+Portanto, deve-se considerar a utilização desta função para a leitura de *flat files*.
+
+Conforme citado no curso, o pacote data.table é de grande eficiência quanto a processamento, uso de memória, tempo de resposta, subconjuntos, entre outros. Porém necessita de aprendizagem de sua sintaxe e no funcionamento das cópias de suas data.tables, podendo haver uma curva de aprendizado
+
+![mindmap4](recursos/pacote_data_table.png)
