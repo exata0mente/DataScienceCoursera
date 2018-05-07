@@ -49,8 +49,6 @@ Convém, ao trabalhar com scripts criarão automáticamente a pasta, verificar s
     }
     ....
 
-![mindmap2](recursos/trabalhando_com_arquivos.png)
-    
 ## Lendo arquivos
 
 ### Arquivos _flat_
@@ -66,6 +64,8 @@ Podemos usar a função `read.table()` para ler este tipo de arquivo. Esta funç
 * diversos outros parâmetros, ver `help()` da função.
 
 Além desta função temos também a `read.csv()` que possui é basicamente a mesma função porém com os parâmetros `header=TRUE` e `sep=","`.
+
+![mindmap2](recursos/trabalhando_com_arquivos.png)
 
 ### Arquivos xlsx (Excel)
 
@@ -118,16 +118,17 @@ Funções básicas:
 
 Próprio para data frames (funções que usam data.frame trabalham bem com data.table), mais eficiente comparado as funções read.* e rápido na extração de subconjuntos.
 
-`data.table()` possui os mesmos parâmetros da função `data.frame()`
-`tables()` traz informações sobre as tabelas (data.table) carregadas na memória.
+* `data.table()` possui os mesmos parâmetros da função `data.frame()`
+* `tables()` traz informações sobre as tabelas (data.table) carregadas na memória.
 
 A estrutura de um data.table é basicamente DT[linha,coluna,*group by*]
 
 ### Subconjuntos de linhas
 
-`DT[2,]` - traz só a segunda linha
-`DT[DT$y=="a"]`- traz apenas as **linhas** em que a coluna y tenha valores iguais a "a".
-Observação importante: Quando você está extraindo subconjuntos por índice, ou seja, `DT[y]`, o resultado é a **linha** correspondente a y. Ao contrário do data.frame em que o y corresponderia a coluna. Exemplo
+* `DT[2,]` - traz só a segunda linha
+* `DT[DT$y=="a"]`- traz apenas as **linhas** em que a coluna y tenha valores iguais a "a".
+
+**Observação importante**: Quando você está extraindo subconjuntos por índice, ou seja, `DT[y]`, o resultado é a **linha** correspondente a y. Ao contrário do data.frame em que o y corresponderia a coluna. Exemplo
     
     > DT[c(2,3)]
             x y          z
@@ -148,28 +149,29 @@ Observação importante: Quando você está extraindo subconjuntos por índice, 
 ### Subconjuntos de colunas
 
 Pode ser realizado normalmente com índices:
-`DT[,c(2,3)]` - traz todas as linhas das colunas 2 e 3
+* `DT[,c(2,3)]` - traz todas as linhas das colunas 2 e 3
+
 Pode ser realizada com expressões em lista
-`DT[,list(mean(x),sum(z))]` traz as linhas (nesse caso uma) da média da coluna x e da soma da coluna z, cada variável em uma coluna.
-`DT[,c(2,3)] == DT[,list(y,z)]` Estas expressões são iguais.
-`DT[,c(mean(x),sum(z))] == DT[,list(mean(x),sum(z))]` Estas também.
+
+* `DT[,list(mean(x),sum(z))]` traz as linhas (nesse caso uma) da média da coluna x e da soma da coluna z, cada variável em uma coluna.
+* `DT[,c(2,3)] == DT[,list(y,z)]` Estas expressões são iguais.
+* `DT[,c(mean(x),sum(z))] == DT[,list(mean(x),sum(z))]` Estas também.
 
 ### Adicionando nova coluna
 
 Utilizar o operador `:=`
 
-`DT[,w:=z^2]` - Adiciona uma coluna z com o quadrado dos valores de z
-`DT[,k:={expressão}]` - adiciona uma coluna k com o resultado da expressão
-`DT[,a:=x>0]` - Adiciona uma coluna a com o resultado da relação lógica, ou seja, uma coluna de `TRUE` ou `FALSE`.
-
+* `DT[,w:=z^2]` - Adiciona uma coluna z com o quadrado dos valores de z
+* `DT[,k:={expressão}]` - adiciona uma coluna k com o resultado da expressão
+* `DT[,a:=x>0]` - Adiciona uma coluna a com o resultado da relação lógica, ou seja, uma coluna de `TRUE` ou `FALSE`.
 
 Convém efetuar uma cópia do data frame antes de efetuar operações de inclusão de grandes conjuntos
 
 É possivel utilizar os conceitos de agrupamento, ou, *group by*
 
-utilizando a última expressão acima, podemos usar os resultados TRUE para adicionar determinado valor para cada registro. Exemplo:
+Utilizando a última expressão acima, podemos usar os resultados TRUE para adicionar determinado valor para cada registro. Exemplo:
 
-`DT[,b:=mean(x+w),by=a]` - Cria uma coluna b e se a for TRUE será inserido o valor da expressão `mean(x+w)` corresponde a sua linha, senão o resultado da expressão será o da coluna inteira, exemplo:
+* `DT[,b:=mean(x+w),by=a]` - Cria uma coluna b e se a for TRUE será inserido o valor da expressão `mean(x+w)` corresponde a sua linha, senão o resultado da expressão será o da coluna inteira, exemplo:
 
     > DT[,b:=mean(x+w),by=a]
     > DT
@@ -188,7 +190,7 @@ utilizando a última expressão acima, podemos usar os resultados TRUE para adic
 
 **.N**, utilizado para contagens. Este é um um dos diferencias do pacote data.table.
 
-Exemplo
+Exemplo:
 
     > DT <- data.table(x=sample(letters[1:3],1E5,TRUE))
     > DT[,.N,by=x]
@@ -214,11 +216,14 @@ _Keys_ (chaves) são muito úteis para ordenação do data.table.
     5: a  0.39267864
     6: a -0.38501910
 
+
 Com a coluna x definida como chave, o DT automaticamente será ordenado conforme x, além de ser possível tirar subconjuntos indicando apenas o valor a ser procurado. Quando executamos `DT['a']`, o conteúdo "a" foi procurado diretamente na coluna x, algo parecido com `DT[x=="a"]` .
 
 ### Mesclagem
 
-O pacote data.table tem uma função `merge()` para data frames criados pelo `data.table()`. Utilizando-a com o `setkey()` ganhamos mais velocidade no processamento das tabelas. Exemplo:
+O pacote data.table tem uma função `merge()` para data frames criados pelo `data.table()`. Utilizando-a com o `setkey()` ganhamos mais velocidade no processamento das tabelas. 
+
+Exemplo:
 
     > DT1 <-data.table(x=c('a','a','b','dt1'),y=1:4)
     > DT2 <- data.table(x=c('a','b','dt2'), z=5:7)
@@ -233,6 +238,7 @@ O pacote data.table tem uma função `merge()` para data frames criados pelo `da
 
 A função `fread()` apresenta uma velocidade muito alta de leitura se comparada ao read.table, por exemplo. Segundo sua descrição no arquivo de ajuda, todos os controles como `sep`, `colClasses` e `nrows` são detectados automaticamente.
 
+
 Em um testes de "tempo" é possível verificar que realmente a leitura é rápida:
 
     > bigdf <- data.frame(x=rnorm(1E6), y=rnorm(1E6))
@@ -246,6 +252,7 @@ Em um testes de "tempo" é possível verificar que realmente a leitura é rápid
         5.755     0.000     5.790 
         
 Portanto, deve-se considerar a utilização desta função para a leitura de *flat files*.
+
 
 Conforme citado no curso, o pacote data.table é de grande eficiência quanto a processamento, uso de memória, tempo de resposta, subconjuntos, entre outros. Porém necessita de aprendizagem de sua sintaxe e no funcionamento das cópias de suas data.tables, podendo haver uma curva de aprendizado
 
