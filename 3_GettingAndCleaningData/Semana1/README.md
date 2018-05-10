@@ -257,3 +257,48 @@ Portanto, deve-se considerar a utilização desta função para a leitura de *fl
 Conforme citado no curso, o pacote data.table é de grande eficiência quanto a processamento, uso de memória, tempo de resposta, subconjuntos, entre outros. Porém necessita de aprendizagem de sua sintaxe e no funcionamento das cópias de suas data.tables, podendo haver uma curva de aprendizado
 
 ![mindmap4](recursos/pacote_data_table.png)
+
+# Notas sobre a avaliação:
+
+Respeitando o [Código de Honra do Coursera](https://learner.coursera.help/hc/en-us/articles/209818863) não irei apresentar as respostas dos exercícios, mas anotarei as linhas de pensamentos a serem seguidas (ou não).
+
+## Exercício 1:
+
+*"(...) How many properties are worth $1,000,000 or more?"*
+
+O questionário 1 é bem simples. Pede para **baixarmos** o arquivo que contém dados sobre a habitação de Idaho em 2006 e pede para trazermos **quantas** casas possuem **valor** maior que $ 1.000.000,00. No exercício também é disponibilizado o *data book* deste conjunto de dados.
+
+É interessante neste exercício criarmos um pequeno script, contendo: 1) Validação e criação de uma pasta, 2)Download e gravação do conjunto de dados, 3) Leitura do conjunto de dados, 4) Subconjunto (não necessário, mas válido para aperfeiçoamento), 5) Apresentação do resultado.
+
+Usei o pacote data.table, já que ele não foi apresentado em vão no curso, e foi bem simples retirar o resultado. A dificuldade que pode aparecer é a identificação da variável responsável por guardar os valores ($) das casas. Leia o exercício com atenção.
+
+## Exercício 2:
+
+*"(...)Which of the "tidy data" principles does this variable violate?"*
+
+Esta questão valida se você entendeu bem as definições de *tidy data*. É fácil respondê-la, deve-se apenas prestar atenção ao *code book*
+
+## Exercício 3:
+
+*"(...)What is the value of: `sum(dat$Zip*dat$Ext,na.rm=T)`"*
+
+Inicialmente tive um probleminha com a instalação do pacote xlsx. Consegui resolver graças a esse [post](http://allanino.me/blog/programming/installing-some-r-packages)
+
+Outro exercício sem muito segredo. Basta utilizar a função de leitura do pacote xlsx, definir os parâmetros corretos e pronto.
+
+
+## Exercício 4:
+
+*"(...) How many restaurants have zipcode 21231?"*
+
+Espero que não tenha ignorado a mensagem que aparece na *lecture* do *Reading XML* em que a maioria dos estudantes precisam voltar na aula para respoder a questão. É verdade, eu fui um deles.
+
+Neste exercício, tenha a sacada de fazer o *parse* do arquivo XML, mais umas coisinhas, e usar o `xpathSApply()`. Esta dica é valiosa.
+
+## Exercício 5:
+
+*"(...)Using the data.table package, which will deliver the fastest user time?"*
+
+Não saia baixando arquivos desnecessariamente. O enunciado nos dá uma dica muuuuuuuuuuuito valiosa. **Usando o pacote data.table**.... Pronto, fácil fácil fácil.
+
+
