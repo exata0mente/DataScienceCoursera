@@ -300,5 +300,3 @@ Neste exercício, tenha a sacada de fazer o *parse* do arquivo XML, mais umas co
 *"(...)Using the data.table package, which will deliver the fastest user time?"*
 
 Não saia baixando arquivos desnecessariamente. O enunciado nos dá uma dica muuuuuuuuuuuito valiosa. **Usando o pacote data.table**.... Pronto, fácil fácil fácil.
-
-
