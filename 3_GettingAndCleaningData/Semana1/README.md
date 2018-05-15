@@ -2,6 +2,8 @@
 
 # Notas de Aula [Semana 1]
 
+Observação: A grande maioria dos exemplos aqui expostos foram extraídos dos cursos do Coursera ou do repositório dos conteúdos https://github.com/DataScienceSpecialization/courses/tree/master/03_GettingData
+
 ## Raw Data (dados brutos)
 
 O *raw data* é basicamente o dado bruto, "direto do forno", o que significa que ele não passou por nenhum processamento prévio, nem por nenhum software que possa ter alterado algum dado, nenhum dado foi movido entre colunas e nenhum script de limpeza foi executado. Ou seja, o dado definitivamente **bruto**, necessitando de lapidação.
