@@ -92,6 +92,7 @@ Os arquivos XML, muito utilizado em aplicações Web, podem ser lidos baseado em
 Funções básicas e de grande utilidade no pacote XML:
 
 * `xmlTreeParse(file)` - "converte" o conteúdo do XML para conteúdo analisável pelo R, ou seja, transforma o conteúdo do XML em um objeto que o R consiga interpretar.
+* `htmlTreeParse(url)`: "converte" o conteúdo do HTML para conteúdo analisável pelo R, ou seja, transforma o conteúdo do XML em um objeto que o R consiga interpretar.
 * `xmlRoot(obj)` - retorna um objeto XML, estruturado em lista, a partir do nó principal, retirando por exemplo as tags de identificação de versão e etc. Além disso, estrutura o XML para que seja possível acessar cada elemento. É possível extrair subconjuntos do objeto.
 * `xmlName(obj)` - retorna o nome do nó principal do objeto.
 * `xmlValue(obj)` - retorna o conteúdo das tags do arquivo XML. O resultado é um único vetor, sem caractere de separção.
