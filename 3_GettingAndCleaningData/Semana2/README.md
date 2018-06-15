@@ -15,7 +15,7 @@ Um ponto importante é, para esta aula, não é necessário instalar o MySQL poi
 
 No meu caso, precisei instalar uma *cliente library*, conforme explicado no [README](https://github.com/r-dbi/RMariaDB#mysql-client-library) do RMariaDB
 
-## Conectando e listando bases, tabelas e campos
+### Conectando e listando bases, tabelas e campos
 
 Iremos utilizar o servidor online da UCSC neste [link](http://genome.ucsc.edu/goldenPath/help/mysql.html).
 
@@ -36,11 +36,11 @@ Lembrando que temos banco de dados -> tabelas -> campos -> registros. No primeir
 * `dbListFields(db, "tabela") - Para listagem de todos os campos de determinada tabela.
  * Exemplo: `dbListFields(hg19, "affyU133Plus2")`
 
-## Lendo um tabela
+### Lendo um tabela
 
 * ´dbReadTable(conn, table, ..)´ - Retorna um data.frame com o conteudo da tabela.
 
-## Lendo um subconjunto específico
+### Lendo um subconjunto específico
 
 **Atenção**. Este tópico pode deixar dúvidas.
 
@@ -56,7 +56,7 @@ que em SQL seria algo correspondente a `limit 10`.
 
 **Não esquecer de fechar as conexões**
 
-## Considerações
+### Considerações
 
 É importante ressaltar que quando acessarmos servidores abertos de banco de dados, usar apenas comandos de consultas (select) e jamais comandos de inserção (insert), atualização (update), mesclagem (join), delete (delete), etc.. Lembre-se, seremos cientistas modernos zelando da reprodutibilidade.
 Nestes casos, se necessário manuseamento dos dados, copiá-los a um servidor local.
@@ -74,11 +74,11 @@ Descrição:
 * Um data.frame no R pode ser considerado um elemento no HDFs
 * Bastante utilizado na genômica.
 
-## O pacote rhdf5
+### O pacote rhdf5
 
 A instalação recomendada é através do [bioconductor](http://bioconductor.org/)
 
-## Funções de criação
+### Funções de criação
 
 * `h5createFile(file)`: Cria no disco um arquivo hdf5.
 * `h5createGroup(file, group): Cria um grupo e subgrupos no arquivo.
@@ -98,7 +98,7 @@ group   name     otype dclass dim
 2  /foo foobaa H5I_GROUP           
 ```
 
-## Escrevendo nos grupos
+### Escrevendo nos grupos
 
 Pode-se utilizar a função `h5write(obj, file, name, ...)`
 
@@ -121,11 +121,11 @@ df = data.frame(1L:5L,seq(0,1,length.out=5),
 h5write(df, "example.h5","df")
 h5ls("example.h5")
 ```
-## Lendo os dados
+### Lendo os dados
 
 A função de leitura é parecida com a de escrita: `h5read(obj, file)`.
 
-## Leitura e escrita em _chunks_ (pedaços) 
+### Leitura e escrita em _chunks_ (pedaços) 
 
 Uma das vantagens do arquivo hd5 é que é possível escrever ou ler em "pedaços" por meio do parâmetro `index`. Por exemplo:
 
@@ -147,3 +147,122 @@ h5read("example.h5", "/foo/C")
 [4,]    5    9
 
 ```
+![mindmap6](recursos/arquivos_hdf5.png)
+
+## Lendo dados da Web
+
+Webscraping: Extrair programaticamente dados dos códigos das páginas de sites.
+
+* Excelente forma de extração de dados.
+* Muitos sites possuem informações que você necessita porém não estão disponibilizadas "organizadamente".
+* Há sites que impoem regras para mineiração dos dados.
+* Leituras em diversas páginas ao mesmo tempo pode bloquear o seu IP.
+
+### Obtendo os dados de sites
+
+* `url(con)`: abre uma conexão com a URL passada no parâmetro
+* `readLines(con, n)`: lê n linhas da conexão con.
+* `close(con)`: fecha uma conexão aberta
+
+### Obtendo com parsing de XML
+
+Uso identico ao citado no [Arquivos XML](https://github.com/exata0mente/DataScienceCoursera/tree/master/3_GettingAndCleaningData/Semana1#arquivos-xml). 
+
+Primeiro precisamos fazer o Parse do conteúdo e converter em um objeto R. Neste caso, usaremos uma estrutura de HTML ao invés de XML.
+
+```r
+url <- "http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en"
+html <- htmlTreeParse(url, useInterlNodes = TRUE)
+```
+
+Observação: No fórum do Coursera, há uma discussão sobre o não funcionamento desta chamada ao htmlTreeParse. É fornecido então uma solução conforme abaixo:
+
+```r
+library(httr)
+html <- htmlTreeParse(rawToChar(GET(url)$content), useInterlNodes = TRUE)
+```
+
+Após o parse podemos efetuar as extrações necessárias, utilizando por exemplo o `xpathSApply(url, xpath, func)`.
+
+```r
+xpathSApply(html, "//td[@class='gsc_a_c']", xmlValue)
+```
+### GET do pacote httr
+
+**Pacote**: httr
+
+* `GET(url)`: Obtém (get) uma url *carece de detalhes*.
+* `content(obj, as="text")`: Retorna o conteúdo do objeto passado, pode ser o retorno do `GET(url)`, como um vetor de caracteres.
+* `htmlParsed(obj, asText=TRUE)`: Faz o parse do conteúdo html passado retornando um objeto R.
+
+O mesmo exemplo acima pode ser realizado da seguinte forma. [Exemplo extraído do curso](https://github.com/DataScienceSpecialization/courses/blob/master/03_GettingData/02_03_readingFromTheWeb/index.md#get-from-the-httr-package).
+
+```r
+library(httr); html2 = GET(url)
+content2 = content(html2,as="text")
+parsedHtml = htmlParse(content2,asText=TRUE)
+xpathSApply(parsedHtml, "//title", xmlValue)
+```
+
+Obtemos uma estrutura da url com o método GET, convertemos esta estrutura em **conteúdo** utilizando a função `content` com o parâmetro `as="text"`, fazemos o parse do HTML para que o objeto resultante seja utilizável com os métodos do pacote XML.
+
+### Acesando sites com Senhas
+
+É possível acessar sites que necessitam de autenticação para serem utilizados. A função `GET` traz em seu conteúdo o retorno (response) do site:
+
+```r
+pg1 = GET("http://httpbin.org/basic-auth/user/passwd",
+pg1
+
+```
+
+```r
+Response [http://httpbin.org/basic-auth/user/passwd]
+  Date: 2018-06-15 21:51
+  Status: 401
+  Content-Type: <unknown>
+<EMPTY BODY>
+```
+
+Veja que o retorno é o 401, acesso não autorizado.
+
+utilizando a função `authenticate()` do próprio pacote `httr` passa-se os dados de acesso do usuário:
+
+```r
+pg2 = GET("http://httpbin.org/basic-auth/user/passwd",
+           authenticate("user", "passwd"))
+pg2
+Response [http://httpbin.org/basic-auth/user/passwd]
+  Date: 2018-06-15 21:51
+  Status: 200
+  Content-Type: application/json
+  Size: 37 B
+{"authenticated":true,"user":"user"}
+```
+
+O retorno 200 nada mais é do que um Ok!
+
+[Aqui](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) uma lista de retornos do protocolo http.
+
+### Usando *handles*
+
+*Handles* pode ser entendido como um "apelido" para determinado objeto. Caso queira, neste [link](https://techterms.com/definition/handle) tem uma definição mais formal. 
+
+Um exemplo para melhor entendimento:
+
+Podemos autenticar determinado *handle* e utilizá-lo para acessar caminhos deste handle.
+
+```r
+google = handle("http://google.com")
+```
+*cria um objeto do httr com os dados da url*
+
+```r
+pg1 = GET(handle = google, path = "/")
+pg2 = GET(handle = google, path = "search")
+```
+Utiza a *handle* no `GET` definindo os caminhos utilizando o parametro `path=""`
+
+É importante notar que o pacote httr faz toda a interface de comunicação do R com a web. Neste ponto, muitos conceitos da área são utilizados causando uma estranheza inicial no assunto. Se você pretende (assim como eu) brincar com *webscraping* deve começar a familiriazar-se com estes termos.
+
+![mindmap7](recursos/dados_web.png)
