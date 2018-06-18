@@ -311,3 +311,13 @@ Em geral, ao utilizar o pacote httr é importante ter em mente os conceitors de 
 Utilizar a página de ajuda do pacote para maiores detalhes.
 
 Além de acesso a dados em formato de texto, existem pacotes que disponibilizam métodos para leitura de imagens, músicas e GIS.
+
+## Notas sobre a avaliação
+
+### Exercício 1
+
+*"(...) Use this data to find the time that the datasharing repo was created. What time was it created?"*
+
+Exercício legal. No enunciado possui um link para um tutorial de como realizar um autenticação da api do github. Não pare por aí. Após a leitura dos dados é necessário encontrar o que o enunciado pede. A dica é: volte ao slide de *Get from API* ou *Read from JSON*.
+
+### Exercício 2
