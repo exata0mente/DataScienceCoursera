@@ -266,3 +266,48 @@ Utiza a *handle* no `GET` definindo os caminhos utilizando o parametro `path=""`
 É importante notar que o pacote httr faz toda a interface de comunicação do R com a web. Neste ponto, muitos conceitos da área são utilizados causando uma estranheza inicial no assunto. Se você pretende (assim como eu) brincar com *webscraping* deve começar a familiriazar-se com estes termos.
 
 ![mindmap7](recursos/dados_web.png)
+
+## Lendo dados de API
+
+API - Application Programming interface
+- Podemos baixar dados de companias como Facebook, Twiter e GitHub.
+- Uso de *GET request*.
+- Pacote httr.
+
+Para usar uma API, geralmente, precisamos de uma conta específica para desenvolvedores. Por exemplo: https://dev.twitter.com/apps
+
+[OAuth](https://pt.wikipedia.org/wiki/OAuth)
+
+### Acessando o twitter pelo R
+
+Para o acesso à API do Twitter, utilizamos o pacote httr, seus métodos para autenticação e algumas informações disponíveis para cada usuário (token, token_secret, key, etc..):
+
+- `oauth_app("twitter", key="suaChave", secret="suaSecret")`: Cria um objeto R com dados de autenticação de acesso à uma aplicação criada.
+- `sign_oauth1.0(myapp, token="seuToken", token_secret="seuTokenSecret")`: Utiliza os dados do objeto criado pelo `oauth_app` para criar um outro objeto com dados de autenticação.
+
+Normalmente os dados extraídos da API vem em formato JSON.
+
+**Este ponto de acesso ao Twitter carece de maior detalhamento**
+
+Em geral, ao utilizar o pacote httr é importante ter em mente os conceitors de `GET`,`POST`,`PUT`, `DELETE` já que o pacote permite utilizá-los em suas requisições.
+
+## Lendo dados de outras fontes.
+
+### Interação direta com arquivos
+
+- `file` - abre uma conexão com um arquivo texto.
+- `url` - abre uma conexão com uma url.
+- `?connections` para maiores informações.
+- **Importante lembrar de sempre encerrar as conexões**
+
+### Pacote *foreing*
+
+- Carrega dados de outras linguagens de programação estatísticas (Minitab, S, SAS, SPSS, Stata)
+- Funções básicas: `read.foo`:
+    - read.arff (Weka).
+    - read.xport (SAS).
+    - read.octave (Octave).
+
+Utilizar a página de ajuda do pacote para maiores detalhes.
+
+Além de acesso a dados em formato de texto, existem pacotes que disponibilizam métodos para leitura de imagens, músicas e GIS.
