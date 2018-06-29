@@ -98,3 +98,256 @@ Y <- cbind(X,rnorm(5)) # adiciona à variável Y o conteúdo de X (df) e adicion
 [Notas de Aulas de Andrew Jaffe](http://www.biostat.jhsph.edu/%7Eajaffe/lec_winterR/Lecture%202.pdf)
 
 ![mindmap8](recursos/subset_order.png)
+
+## Resumindo (summarizing) dados
+
+Ao realizarmos o carregamento (load) de um conjunto de dados, proucuramos tirar resumos deles, ou seja, em definição não formal, agrupar dados em variáveis e aplicar estatísticas nestas amostragens.
+
+Utilizaremos o mesmo [conjunto][1] de dados da aula do Coursera
+
+### Olhando um pouco dos dados
+
+O primeiro passo após carregar um conjunto de dados é fazer sua leitura (de visualização). Não seria prudente abrir um conjunto de dados completo, considerando que trabalharemos (tomara) com grandes *data sets*. 
+
+Existem funções do R em que podemos ver uma pequena parte do início ou do fim do conjunto carregado.
+
+- `head(conj, n)` - mostra as primeiras n linhas de um conjunto de dados conj.
+- `tail(conj, n)` - mostra as últimas n linhas de um conjunto de dados conj.
+- `summary(conj)` - mostra um resumo das [variáveis][2] do conjunto de dados.
+    - variáveis do tipo qualitativas ( *text* ou *factor* ) a função faz uma contagem e agrupa os resultados.
+    - variáveis do tipo quantitativas ( *numeric* ou *integer*) a função faz uma descrição dos dados (mínimo, primeiro quartil, mediana, média, terceiro quartil, máximo)
+- str(conj) - mostra a estrutura da váriavel informando dados como a classe do conjunto de dados e das variáveis (coluna) deste conjunto de dado.
+
+Exemplo de `summary`
+
+```r
+                           name         zipCode             neighborhood councilDistrict
+ MCDONALD'S                  :   8   Min.   :-21226   Downtown    :128   Min.   : 1.00  
+ POPEYES FAMOUS FRIED CHICKEN:   7   1st Qu.: 21202   Fells Point : 91   1st Qu.: 2.00  
+ SUBWAY                      :   6   Median : 21218   Inner Harbor: 89   Median : 9.00  
+ KENTUCKY FRIED CHICKEN      :   5   Mean   : 21185   Canton      : 81   Mean   : 7.19  
+ BURGER KING                 :   4   3rd Qu.: 21226   Federal Hill: 42   3rd Qu.:11.00  
+ DUNKIN DONUTS               :   4   Max.   : 21287   Mount Vernon: 33   Max.   :14.00  
+ (Other)                     :1293                    (Other)     :863                  
+      policeDistrict                        Location.1      
+ SOUTHEASTERN:385    1101 RUSSELL ST\nBaltimore, MD\n:   9  
+ CENTRAL     :288    201 PRATT ST\nBaltimore, MD\n   :   8  
+ SOUTHERN    :213    2400 BOSTON ST\nBaltimore, MD\n :   8  
+ NORTHERN    :157    300 LIGHT ST\nBaltimore, MD\n   :   5  
+ NORTHEASTERN: 72    300 CHARLES ST\nBaltimore, MD\n :   4  
+ EASTERN     : 67    301 LIGHT ST\nBaltimore, MD\n   :   4  
+ (Other)     :145    (Other)                         :1289  
+```
+
+Exemplo de `str`
+
+```r
+'data.frame':	1327 obs. of  6 variables:
+ $ name           : Factor w/ 1277 levels "#1 CHINESE KITCHEN",..: 9 3 992 1 2 4 5 6 7 8 ...
+ $ zipCode        : int  21206 21231 21224 21211 21223 21218 21205 21211 21205 21231 ...
+ $ neighborhood   : Factor w/ 173 levels "Abell","Arlington",..: 53 52 18 66 104 33 98 133 98 157 ...
+ $ councilDistrict: int  2 1 1 14 9 14 13 7 13 1 ...
+ $ policeDistrict : Factor w/ 9 levels "CENTRAL","EASTERN",..: 3 6 6 4 8 3 6 4 6 6 ...
+ $ Location.1     : Factor w/ 1210 levels "1 BIDDLE ST\nBaltimore, MD\n",..: 835 334 554 755 492 537 505 530 507 569 ...
+```
+
+### Quartil de variáveis quantitativas
+
+- `quantile(conj)` - retorna o [quartil][3] de um vetor.
+    - com o parâmetro `na.rm=TRUE`, retorna os registros com valor NA são ignorados.
+    - com o parâmetro `probs=c(0.5,0.75,0.9)`, retorna os registros com as separatrizes em 50%, 75% e 90%, por exemplo.
+
+### Criando tabelas
+
+- `table(conj)` - cria uma tabela com o agrupamento das variáveis categóricas como coluna e a contagem de seus registro.
+
+Exemplo de `table`
+
+```r
+set.seed(1234)
+conjAleatorio <- data.frame(
+     "letras"=sample(x = LETTERS, size = 20, replace = TRUE),
+     "numeros"=sample(x = 1:5, size = 20, replace = TRUE))
+table(conjAleatorio$letras)
+```
+
+```r
+A C E G H N O P Q R S V W Y 
+1 1 1 3 3 1 1 1 3 1 1 1 1 1 
+```
+
+O mesmo pode ser feito se compararmos duas colunas da mesma tabela
+
+```r
+table(conjAleatorio$letras, conjAleatorio$numeros)
+```
+```r
+    1 2 3 4 5
+  A 0 0 1 0 0
+  C 0 1 0 0 0
+  E 0 0 0 0 1
+  G 0 1 0 0 2
+  H 1 2 0 0 0
+  N 1 0 0 0 0
+  O 0 1 0 0 0
+  P 1 0 0 0 0
+  Q 1 1 0 0 1
+  R 0 0 0 0 1
+  S 0 0 1 0 0
+  V 0 0 0 1 0
+  W 0 1 0 0 0
+  Y 0 0 1 0 0
+```
+Veja que a combinação de resultados de G e 5, aparecem duas vezes:
+
+```r
+conjAleatorio[order(conjAleatorio$letras),]
+   letras numeros
+7       A       3
+1       C       2
+19      E       5
+8       G       5 #<--
+18      G       2
+20      G       5 #<--
+13      H       2
+15      H       1
+17      H       2
+10      N       1
+12      O       2
+3       P       1
+2       Q       2
+4       Q       1
+6       Q       5
+9       R       5
+11      S       3
+16      V       4
+5       W       2
+14      Y       3
+```
+
+### Verificar se há valores faltantes
+
+- `is.na(conj)` - retorna um vetor com valores TRUE e FALSE para os índices do conj em que o registro for NA.
+
+Lembrando que TRUE equivale a 1 e FALSE equivale a 0, portanto em um conjunto de TRUEs e FALSEs se utilizarmos a função `sum` obteremos a quantidade de registros com valor TRUE.
+
+- `sum(is.na(conj))` - retorna, não diretamente, a quantidade de valores TRUE, ou seja, a quantidade de registros NA no conjunto de dados conj.
+- `any(is.na(conj))` - retorna TRUE se no conjunto conj houver ao menos um registro TRUE. Ou seja, se no conjunto houver algum registro NA esta função ajuda na identificação.
+- `all(conj > 25)` - retorna TRUE se no conjunto resultante de `conj > 25` todos os valores forem TRUE.
+- `colSums(conj)` - retorna a soma das colunas de um conjunto de dados. Pode ser utilizada com a função `is.na()` para verificar todas as colunas do data set.
+
+### Valores com caracteres específicos
+
+#### Operador `%in%`
+
+Retorna um vetor lógico onde o primeiro combina com o segundo. É algo como um grep do linux ou até uma claúsula where do SQL:
+
+```r
+var1 %in% var2
+```
+Exemplo com conjunto acima:
+
+```r
+conjAleatorio$letras %in% c("C")
+```
+```r
+ [1]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[19] FALSE FALSE
+```
+... equivale a ...
+
+```r
+conjAleatorio[,1] == "C"
+```
+```r
+ [1]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[19] FALSE FALSE
+```
+O primeiro é bem mais intuítivo e tem maior utilidades para comparações maiores
+
+```r
+conjAleatorio$letras %in% c("C","Q","E","G")
+```
+```r
+ [1]  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+[19]  TRUE  TRUE
+```
+Podemos aplicar a função `table` ao retorno do `%in%`.
+
+```r
+table(conjAleatorio$letras %in% c("C","Q","E","G"))
+```
+```r
+FALSE  TRUE 
+   12     8 
+```
+
+Agora pense, se o retorno da função %in% é um vetor lógico, podemos usá-lo para tirar amostras de uma população:
+
+```r
+conjAleatorio[conjAleatorio$letras %in% c("C","Q","E","G"),]
+   letras numeros
+```
+```r
+1       C       2
+2       Q       2
+4       Q       1
+6       Q       5
+8       G       5
+18      G       2
+19      E       5
+20      G       5
+```
+## Cross tabs
+
+Para [tabulação cruzada][4]usamos a função `xtabs` ( [uso da função][5] em português).
+
+- `xtabs(formula, data)` - faz uma tabulação baseado na fórmula e em um conjunto de dados.
+
+A tal da fórmula é *variável dependente ~ variáveis preditoras* (visto [aqui][5]), onde varíavel dependente é a variável que sofre alterações ao se realizar mudanças em outras variáveis. Veja a função do primeiro grau:
+
+y = ax + b
+
+A variável dependente é o y pois, sendo a e b constantes, para cada valor em x o valor de y irá alterar-se. Variáveis preditoras são as variáveis que alterarão a variável dependente. Para o exemplo acima, seria a variável x, ou seja, a variável independente.
+
+Utilze [este exemplo][6]
+
+```r
+data(UCBAdmissions)
+DF = as.data.frame(UCBAdmissions)
+summary(DF)
+```
+
+Neste conjunto de dados temos as variáveis Admit, Gender, Dept e Freq. Dada a função:
+
+```r
+xt <- xtabs(Freq ~ Gender + Admit,data=DF)
+```
+Queremos uma tabela cruzada em que os valores a serem resumidos são os da coluna Freq e queremos relacioná-las entre Gender e Adimt. Ou seja, qual a frequência de admissão (...) por gênero aceitas e rejeitadas.
+
+```r
+xt
+        Admit
+Gender   Admitted Rejected
+  Male       1198     1493
+  Female      557     1278
+```
+
+## Flat tables
+
+Necessita de maior esclarecimentos sobre o *flat table*
+
+## Tamanho de um conjunto de dados
+
+`object.size(obj)` - Fornece uma estimativa da memória que está sendo usada para armazenar um objeto R.
+`print(object.size(obj), units="Mb")` - Retorna o tamanho convertido em Mb (ver manual da função `??object.size`).
+
+![mindmap8](recursos/sumar.png)
+
+
+[1]: https://github.com/DataScienceSpecialization/courses/blob/master/03_GettingData/03_02_summarizingData/index.md#getting-the-data-from-the-web
+[2]: http://leg.ufpr.br/~silvia/CE055/node8.html
+[3]: http://www.inf.ufsc.br/~marcelo.menezes.reis/AED05.pdf
+[4]: http://www.unilago.com.br/download/arquivos/21034/Estatistica_Aplicada_-_Resumo_03.pdf
+[5]: http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:02_tutoriais:tutorial4:start#xtabs
+[6]: https://github.com/DataScienceSpecialization/courses/blob/master/03_GettingData/03_02_summarizingData/index.md#cross-tabs
