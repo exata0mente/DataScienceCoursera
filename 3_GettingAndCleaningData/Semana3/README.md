@@ -298,7 +298,7 @@ conjAleatorio[conjAleatorio$letras %in% c("C","Q","E","G"),]
 19      E       5
 20      G       5
 ```
-## Cross tabs
+### Cross tabs
 
 Para [tabulação cruzada][4]usamos a função `xtabs` ( [uso da função][5] em português).
 
@@ -333,16 +333,18 @@ Gender   Admitted Rejected
   Female      557     1278
 ```
 
-## Flat tables
+### Flat tables
 
 Necessita de maior esclarecimentos sobre o *flat table*
 
-## Tamanho de um conjunto de dados
+### Tamanho de um conjunto de dados
 
 `object.size(obj)` - Fornece uma estimativa da memória que está sendo usada para armazenar um objeto R.
 `print(object.size(obj), units="Mb")` - Retorna o tamanho convertido em Mb (ver manual da função `??object.size`).
 
 ![mindmap8](recursos/sumar.png)
+
+
 
 
 [1]: https://github.com/DataScienceSpecialization/courses/blob/master/03_GettingData/03_02_summarizingData/index.md#getting-the-data-from-the-web
