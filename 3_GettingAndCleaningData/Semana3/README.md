@@ -344,6 +344,52 @@ Necessita de maior esclarecimentos sobre o *flat table*
 
 ![mindmap8](recursos/sumar.png)
 
+## Criando novas variáveis
+
+### Por quê criar novas variáveis?
+
+- Frequentemente o dado bruto não terá o valor que você está proucurando.
+- Você precisará transformar os dados para obter o valor desejado.
+- Normalmente, você adicionará esses valores a um data.frame com os dados em que esteja trabalhando.
+- Variáveis comuns:
+    - Indicadores de falta.
+    - Cortes de variáveis quantitativas (??)
+    - *Applying transforms.*
+
+### Criando sequências
+
+- Útil para adicionar índices a conjuntos de dados
+- `seq(from=a, to=b, by=c, length=d)` - cria uma sequência regular em um vetor de *a* até *b*, com uma razão de *c* tendo conjunto um tamanho *d*.
+- `seq(along=conj)` - cria uma sequência regular em um vetor com o tamanho do conjunto.
+
+### Subconjunto de variáveis
+
+Utilizando o [mesmo][7] conjunto de dados das aulas anteriores podemos criar uma variável que indica quais os registros que tenham uma característica específica:
+
+```r
+restData$nearMe = restData$neighborhood %in% c("Roland Park", "Homeland")
+table(restData$nearMe)
+```
+```r
+FALSE  TRUE 
+ 1314    13 
+```
+### Criando variáveis binárias
+
+## Vamos falar sobre Tidy Data.
+
+Basicamente:
+
+* Cada variavel forma uma coluna
+* Cada observação forma uma linha
+* Cada tipo de "unidade observacional" forma uma tabela.
+
+### Funções (muito) úteis
+
+* `gather()`:
+* `separete()`:
+* `spread()`:
+* `unique()` 
 
 
 
@@ -353,3 +399,4 @@ Necessita de maior esclarecimentos sobre o *flat table*
 [4]: http://www.unilago.com.br/download/arquivos/21034/Estatistica_Aplicada_-_Resumo_03.pdf
 [5]: http://ecologia.ib.usp.br/bie5782/doku.php?id=bie5782:02_tutoriais:tutorial4:start#xtabs
 [6]: https://github.com/DataScienceSpecialization/courses/blob/master/03_GettingData/03_02_summarizingData/index.md#cross-tabs
+[7]: https://github.com/exata0mente/DataScienceCoursera/tree/master/3_GettingAndCleaningData/Semana3#resumindo-summarizing-dados
