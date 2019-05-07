@@ -46,6 +46,3 @@ library(stringr)
 ```
 
 Possui diversas funções usuais para lidar com strings. Por exemplo a função `str_trim(string)` que retira espaços em branco que aparecem no começo e no fim de uma string
-
-
-
