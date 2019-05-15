@@ -46,3 +46,13 @@ library(stringr)
 ```
 
 Possui diversas funções usuais para lidar com strings. Por exemplo a função `str_trim(string)` que retira espaços em branco que aparecem no começo e no fim de uma string
+
+
+## Expressão Regular
+
+O que é expressão regular vou deixar para que quem esteja lendo procure a definição (culpa da aula de Compiladores)
+
+Acho importante usar este [conteúdo](https://github.com/DataScienceSpecialization/courses/blob/master/03_GettingData/04_03_regularExpressionsII/index.md) (visto no curso) como um manual de bolso de expressão regular.
+
+## Trabalhando com datas
+
