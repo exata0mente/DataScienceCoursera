@@ -1,5 +1,6 @@
 *.Rhistory
 *.xmind
 *.RData
+*.bz2	
 
 */objetos/data/*
