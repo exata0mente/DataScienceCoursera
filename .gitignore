@@ -2,5 +2,5 @@
 *.xmind
 *.RData
 *.bz2	
-
+*.html
 */objetos/data/*
