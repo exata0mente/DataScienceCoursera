@@ -1,3 +1,10 @@
+---
+livro: Exploratory Data Analysis
+autor: Roger Peng
+capitulo: Exploratory Data Analisys Checklist
+pagina: 18
+---
+
 Decidi começar pelo livro de [Exploratory Data Analisys](https://leanpub.com/exdata) devido ao pequeno problema com a língua inglesa (os vídeos da primeira semana são longos e com bastante "conversação").
 
 O capítulo é o _Exploratory Data Analisys Checklist_, página 18, em que o autor indica um checklist não oficial para guiar na análise exploratória dos dados:
