@@ -36,9 +36,9 @@ df_gdp <- df_gdp %>%
 
 # Mescla as tabelas pela coluna com valores em comum
 m1 <- merge(df_gdp, df_edu, by.x = "ShortCode", by.y = "CountryCode")
-m2 <- m1 %>% arrange(Ranking) %>% filter(Ranking == 13) %>% select(ShortCode, Long.Name)
+m2 <- m1 %>% arrange(desc(Ranking))
 
-paste(dim(m1)[1], "Matches, 13th country is", m2$Long.Name)
+paste(dim(m1)[1], "Matches, 13th country is", m2[13,"Long.Name"])
 
 rm(m2)
 ######################### Exercício 4 #########################
