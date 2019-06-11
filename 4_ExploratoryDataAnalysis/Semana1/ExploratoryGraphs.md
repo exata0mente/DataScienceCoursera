@@ -63,8 +63,16 @@ Por exemplo, no gráfico abaixo é possível notar que a maior concentração de
 
 O histograma é criado através da função `hist()`.
 
-#### Gráfico de barras
+### Gráfico de barras
 
 O gráfico de barras é útil para comprarmos/resumirmos variáveis categoricas
 
 ![barplot](recursos/Rplot02.png)
+
+## Resumo simples: Duas ou mais dimensões
+
+Para duas dimensões os gráficos apresentados são muito úteis quando usados lado a lado. Por exemplo um gráfico de barras de vendas da região de Goiás ao lado de um mesmo gráfico só que da região do Rio Grande do Norte.
+
+Há também o gráfico de dispersão (scatterplot) que é muito útil para se utilizar com duas [variáveis contínuas](http://leg.ufpr.br/~silvia/CE055/node8.html).
+
+Recomenda-se o uso de cores para simular uma terceira dimensão. Também recomenda-se o uso de linhas (verticais ou horizontais) para demarcar alguma medida de referência (mediana por exemplo).
